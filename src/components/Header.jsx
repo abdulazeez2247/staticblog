@@ -24,7 +24,7 @@ export default function Header() {
           </li>
         </ul>
         <div className='lg:hidden'>
-          <i className=' pi pi-align-justify'></i>
+          <i className=' pi pi-align-justify text-3xl'></i>
         </div>
     </div>
     
