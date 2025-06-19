@@ -7,6 +7,9 @@ import Aboutuspage from '../pages/Aboutuspage'
 import Singlepage from '../pages/Singlepage'
 import Addblog from '../pages/Addblog'
 import EditBlog from '../pages/EditBlog'
+import Loginpage from '../pages/Loginpage'
+import Registerpage from '../pages/Registerpage'
+import Validation from '../pages/Validation'
 
 
 
@@ -22,6 +25,9 @@ export default function Router() {
           <Route path='/singlepage/:id' element={<Singlepage/>}/>
           <Route path='/addblog' element={<Addblog/>}/>
           <Route path='/editblog/:id' element={<EditBlog/>}/>
+          <Route path='/login' element={<Loginpage/>}/>
+          <Route path='/register' element={<Registerpage/>}/>
+          <Route path='/verify' element={<Validation/>}/>
         </Routes>
         <Footer/>
         </BrowserRouter>

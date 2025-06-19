@@ -13,7 +13,7 @@ export default function Header() {
     <div className="flex w-[100%] justify-between text-white bg-gray-900 px-10 h-[10vh] items-center">
         <h2 className="text-2xl font-bold">Blog</h2>
         <ul className="lg:flex hidden gap-3">
-          <li className="border py-2 px-6 rounded-sm hover:bg-gradient-to-bl from-gray-950 to-gray-400">
+          <li className="border py-2 px-6 bg-blue-500 rounded-tl-sm rounded-tr-sm rounded-bl-sm rounded-br-sm hover:bg-gradient-to-tr from-blue-400 to-blue-900">
             <Link to="/">Home</Link>
           </li>
           <li className="border py-2 px-6 rounded-sm hover:bg-gradient-to-bl from-gray-950 to-gray-400">
@@ -21,6 +21,12 @@ export default function Header() {
           </li>
           <li className="border py-2 px-6 rounded-sm hover:bg-gradient-to-bl from-gray-950 to-gray-400">
             <Link to="/addblog">Add-blog</Link>
+          </li>
+          <li className="border py-2 px-6 rounded-sm hover:bg-gradient-to-bl from-gray-950 to-gray-400">
+            <Link to="/register">Register</Link>
+          </li>
+          <li className="border py-2 px-6 rounded-sm hover:bg-gradient-to-bl from-gray-950 to-gray-400">
+            <Link to="/login">Login</Link>
           </li>
         </ul>
         <div className='lg:hidden' onClick={navtoggle}>
@@ -44,6 +50,12 @@ export default function Header() {
             <li className="border py-2 px-6 rounded-sm hover:bg-gradient-to-bl from-gray-950 to-gray-400">
               <Link to="/addblog">Add-blog</Link>
             </li>
+            <li className="border py-2 px-6 rounded-sm hover:bg-gradient-to-bl from-gray-950 to-gray-400">
+            <Link to="/registerpage">Register</Link>
+          </li>
+          <li className="border py-2 px-6 rounded-sm hover:bg-gradient-to-bl from-gray-950 to-gray-400">
+            <Link to="/loginpage">Login</Link>
+          </li>
           </ul>
           )
         }
