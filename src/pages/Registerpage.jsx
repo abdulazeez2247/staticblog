@@ -29,7 +29,7 @@ export default function Signup() {
         toast.success(response.data.message);
         localStorage.setItem('userIdForVerification', response.data.user._id);
         localStorage.setItem('emailForVerification', response.data.user.email);
-        navigate('/validation');
+        navigate('/verify');
       } else {
         toast.error(response.data.message || 'Registration failed: No user ID received.');
       }
