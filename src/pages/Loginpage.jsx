@@ -45,7 +45,7 @@ export default function SignIn() {
           <button type="submit" disabled={loading} className="w-full h-11 bg-blue-700 text-white rounded-md hover:bg-blue-600 transition font-semibold text-sm flex items-center justify-center"> {loading ? "Logging in..." : "Login"} </button>
         </form>
         <div className="mt-5 space-y-2 text-xs text-gray-600 font-medium">
-          <p>Forgot Password?  <Link to="/verify" className="text-blue-600 hover:underline">Verify Email</Link></p>
+          <p className='text-blue-500'><Link to={"/forgotpassword"}>Forgot Password?</Link></p>
           <p>Don't have an account?  <Link to="/register" className="text-green-600 font-semibold hover:underline">Sign Up</Link></p>
         </div>
       </div>

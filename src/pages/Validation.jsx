@@ -1,28 +1,31 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { resendOtp, verifyOTP } from '../data/newsdata';
 
 export default function Validation() {
   const navigate = useNavigate();
-
+  const inputRefs = useRef([]);
   const [otpArray, setOtpArray] = useState(['', '', '', '']);
   const [loading, setLoading] = useState(false);
 
-  const [email, setEmail] = useState(() => localStorage.getItem('emailForVerification') || '');
-  const [userId, setUserId] = useState(() => localStorage.getItem('userIdForVerification') || '');
+  // For registration only
+  const email = localStorage.getItem('emailForVerification') || '';
+  const userId = localStorage.getItem('userIdForVerification') || '';
+
+  useEffect(() => {
+    inputRefs.current[0]?.focus();
+  }, []);
 
   const handleChange = (e, index) => {
     const { value } = e.target;
     if (!/^\d?$/.test(value)) return;
+
     const newOtpArray = [...otpArray];
     newOtpArray[index] = value;
     setOtpArray(newOtpArray);
-    if (value && index < 3) {
-      const nextInput = e.target.nextSibling;
-      if (nextInput) nextInput.focus();
-    }
+
+    if (value && index < 3) inputRefs.current[index + 1]?.focus();
   };
 
   const handleKeyDown = (e, index) => {
@@ -31,8 +34,7 @@ export default function Validation() {
       if (!otpArray[index] && index > 0) {
         newOtpArray[index - 1] = '';
         setOtpArray(newOtpArray);
-        const prevInput = e.target.previousSibling;
-        if (prevInput) prevInput.focus();
+        inputRefs.current[index - 1]?.focus();
       } else {
         newOtpArray[index] = '';
         setOtpArray(newOtpArray);
@@ -42,36 +44,32 @@ export default function Validation() {
 
   const handleSubmitOtp = async (e) => {
     e.preventDefault();
-    setLoading(true);
     const otp = otpArray.join('');
-    if (otp.length !== 4 || !/^\d{4}$/.test(otp)) {
+
+    if (otp.length !== 4) {
       toast.error('Please enter a valid 4-digit OTP.');
-      setLoading(false);
       return;
     }
 
     if (!userId) {
       toast.error('User ID not found. Please register again.');
-      setLoading(false);
       return;
     }
 
     try {
-      const response = await verifyOTP({ userId, otp });
-      if (response.data?.success) {
-        toast.success(response.data.message || 'OTP verified successfully!');
+      setLoading(true);
+      const res = await verifyOTP({ userId, otp });
+
+      if (res.data?.success) {
+        toast.success(res.data.message || 'OTP verified!');
         localStorage.removeItem('userIdForVerification');
         localStorage.removeItem('emailForVerification');
-        navigate('/');
+        navigate('/'); // Redirect to homepage or dashboard
       } else {
-        toast.error(response.data.message || 'OTP verification failed.');
+        toast.error(res.data.message || 'OTP verification failed.');
       }
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        toast.error(error.response.data.message || 'Verification failed.');
-      } else {
-        toast.error('Unexpected error. Try again later.');
-      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Verification failed.');
     } finally {
       setLoading(false);
     }
@@ -84,18 +82,10 @@ export default function Validation() {
     }
 
     try {
-      const response = await resendOtp({ email });
-      if (response.data?.message) {
-        toast.success(response.data.message);
-      } else {
-        toast.error('Failed to resend OTP. Please try again.');
-      }
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        toast.error(error.response.data.message || 'Failed to resend OTP.');
-      } else {
-        toast.error('Unexpected error during resend.');
-      }
+      const res = await resendOtp({ email });
+      toast.success(res.data?.message || 'OTP resent!');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Resend failed.');
     }
   };
 
@@ -103,25 +93,48 @@ export default function Validation() {
     <div className="bg-gradient-to-br from-slate-900 to-gray-800 min-h-screen flex items-center justify-center px-4">
       <div className="bg-white max-w-sm w-full rounded-xl p-8 shadow-2xl">
         <div className="text-center mb-6">
-          <div className="text-indigo-600 text-5xl mb-3">
-            <i className="pi pi-envelope"></i>
-          </div>
           <h2 className="text-2xl font-bold text-gray-800">Email Verification</h2>
-          <p className="text-sm text-gray-600 mt-2"> {`A 4-digit verification code has been sent to`}<br /><strong className="text-indigo-600">{email}</strong></p>
+          <p className="text-sm text-gray-600 mt-2">
+            A 4-digit code has been sent to <br />
+            <strong className="text-indigo-600">{email}</strong>
+          </p>
         </div>
+
         <form onSubmit={handleSubmitOtp} className="space-y-4">
           <div className="flex justify-between gap-2">
             {otpArray.map((digit, index) => (
-            <input key={index} type="text" maxLength="1" value={digit} onChange={(e) => handleChange(e, index)} onKeyDown={(e) => handleKeyDown(e, index)} className="w-12 h-12 border border-gray-300 rounded-md text-center text-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-150"/>))}
+              <input
+                key={index}
+                type="text"
+                maxLength="1"
+                value={digit}
+                ref={(el) => (inputRefs.current[index] = el)}
+                onChange={(e) => handleChange(e, index)}
+                onKeyDown={(e) => handleKeyDown(e, index)}
+                className="w-12 h-12 border border-gray-300 rounded-md text-center text-xl focus:ring-2 focus:ring-indigo-500 outline-none"
+              />
+            ))}
           </div>
 
-          <button type="submit" disabled={loading} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 rounded-md transition flex justify-center items-center gap-2">
-            {loading && <i className="pi pi-spinner pi-spin text-white text-sm"></i>}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 rounded-md transition"
+          >
             {loading ? 'Verifying...' : 'Verify Email'}
           </button>
         </form>
+
         <div className="text-center mt-4">
-          <p className="text-xs text-gray-500">Didn't receive the code?  <span onClick={handleResendOtp}  className="text-indigo-600 hover:underline font-medium cursor-pointer" > Resend verification code</span></p>
+          <p className="text-xs text-gray-500">
+            Didn’t receive the code?{' '}
+            <span
+              onClick={handleResendOtp}
+              className="text-indigo-600 hover:underline font-medium cursor-pointer"
+            >
+              Resend
+            </span>
+          </p>
         </div>
       </div>
     </div>

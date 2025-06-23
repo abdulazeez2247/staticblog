@@ -63,7 +63,7 @@ export default function Signup() {
                 </button>
             </form>
             <div className="mt-5 text-xs text-gray-600">
-                <p className="mb-2">Forgot Password?</p>
+                {/* <p className="mb-2">Forgot Password?</p> */}
                 <p>Already have an account? <Link to="/login" className="text-green-600 font-semibold hover:underline">Login</Link></p>
             </div>
         </div>

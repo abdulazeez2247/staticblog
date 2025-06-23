@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const apiurl = "http://localhost:5000/api";
-const apiurl = "https://blogbackend-fa17.onrender.com/api";
+const apiurl = "http://localhost:5000/api";
+// const apiurl = "https://blogbackend-fa17.onrender.com/api";
 const getallblogs = async () => {
   return await axios.get(`${apiurl}/getallblogs`);
 };
@@ -29,5 +29,34 @@ const resendOtp = async ({email}) =>{
 const loginUser = async ({ email, password }) => {
   return await axios.post(`${apiurl}/login`, { email, password });
 };
-export{getallblogs, createnewblog, getoneblog, editoneblog, deleteblog, registeruser, verifyOTP, resendOtp, loginUser };
+const forgetpassword = async ({ email }) => {
+  return await axios.post(`${apiurl}/forgetpassword`, { email });
+};
 
+const newpassword = async ({ email, otp, newPassword, confirmPassword }) => {
+  return await axios.post(`${apiurl}/newpassword`, {
+    email,
+    otp,
+    newPassword,
+    confirmPassword
+  });
+};
+
+const verifypasswordotp = async ({ email, otp }) => {
+  return await axios.post(`${apiurl}/verifypasswordotp`, { email, otp });
+};
+
+export {
+  getallblogs,
+  createnewblog,
+  getoneblog,
+  editoneblog,
+  deleteblog,
+  registeruser,
+  verifyOTP,
+  resendOtp,
+  loginUser,
+  forgetpassword,
+  newpassword,
+  verifypasswordotp
+};

@@ -10,6 +10,9 @@ import EditBlog from '../pages/EditBlog'
 import Loginpage from '../pages/Loginpage'
 import Registerpage from '../pages/Registerpage'
 import Validation from '../pages/Validation'
+import Forgotpassword from '../pages/Forgotpassword'
+import Newpassword from '../pages/Newpassword'
+import Verifynewotp from '../pages/Verifynewotp'
 
 
 
@@ -28,6 +31,9 @@ export default function Router() {
           <Route path='/login' element={<Loginpage/>}/>
           <Route path='/register' element={<Registerpage/>}/>
           <Route path='/verify' element={<Validation/>}/>
+          <Route path='/forgotpassword' element={<Forgotpassword/>}/>
+          <Route path='/newpassword' element={<Newpassword/>}/>
+          <Route path='/verifypasswordotp' element={<Verifynewotp/>}/>
         </Routes>
         <Footer/>
         </BrowserRouter>
