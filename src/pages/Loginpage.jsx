@@ -9,6 +9,9 @@ export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false); 
+  localStorage.setItem('token', 'your_token_here');
+  
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,6 +26,7 @@ export default function SignIn() {
       const response = await loginUser({ email, password });
       if (response.data && response.data.user) {
         toast.success(response.data.message || "Login successful!");
+        window.location.reload();
         navigate('/');  
       } else {
         toast.error(response.data.message || "Login failed.");
