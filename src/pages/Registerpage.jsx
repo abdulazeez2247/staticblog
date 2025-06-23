@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { registeruser } from '../data/newsdata';
 
+
 export default function Signup() {
   const navigate = useNavigate();
   const [firstname, setFirstname] = useState('');
